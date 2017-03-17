@@ -4,12 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace xml_analyze
 {
     class Program
     {
         static void Main(string[] args)
+        {
+
+            List<Station> stationList=FindStations();
+        }
+
+        public static List<Station> FindStations()
         {
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(@"D:\git\xml_analyze\xml_analyze\河川水位.xml");//isbn.xml  河川水位.xml
@@ -33,7 +40,9 @@ namespace xml_analyze
             String StrObservatoryName;
             String StrElevationOfWaterLevelZeroPoint;
 
-            for (int i = 0; i < LocationAddressLists.Count; i++)
+            Station station = new Station();
+            List<Station> stationList = new List<Station>();
+            for (int i = 0; i < LocationAddressLists.Count; i++)//改成foreach?
             {
                 LocationAddressNode = LocationAddressLists[i];
                 ObservatoryNameNode = ObservatoryNameLists[i];
@@ -42,11 +51,16 @@ namespace xml_analyze
                 StrObservatoryName = ObservatoryNameNode.InnerText;
                 StrElevationOfWaterLevelZeroPoint = ElevationOfWaterLevelZeroPointNode.InnerText;
 
+                station.LocationAddress = StrLocationAddress;
+                station.ObservatoryName = StrObservatoryName;
+                station.ElevationOfWaterLevelZeroPoint = StrElevationOfWaterLevelZeroPoint;
+                stationList.Add(station);
+
                 Console.WriteLine(StrLocationAddress + "\t" + StrObservatoryName + "\t" + StrElevationOfWaterLevelZeroPoint);
             }
 
             Console.ReadKey();
-
+            return stationList;
         }
     }
 }
